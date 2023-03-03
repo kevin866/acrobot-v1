@@ -18,15 +18,18 @@ def show_smart_agent():
     env = gym.make('Acrobot-v1')
     recorder = VideoRecorder(env, path='./video.mp4', enabled=True)
     state = env.reset()
+    cum_rew = 0
 
     for t in range(1000):
         recorder.capture_frame()
         action, _ = policy.act(state)
         env.render()
         state, reward, done, _ = env.step(action)
+        cum_rew+=1
         if done:
+            print(cum_rew)
             break 
-        time.sleep(0.05)
+        time.sleep(0.1)
 
     env.close()
 
