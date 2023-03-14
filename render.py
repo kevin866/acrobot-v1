@@ -29,7 +29,7 @@ def show_smart_agent():
         if done:
             print(cum_rew)
             break 
-        time.sleep(0.1)
+        time.sleep(0.05)
 
     env.close()
 
