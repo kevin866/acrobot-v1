@@ -11,6 +11,7 @@ import torch.optim as optim
 from torch.distributions import Categorical
 from policy import Policy
 from gym.wrappers.monitoring.video_recorder import VideoRecorder
+import torch.nn as nn
 
 env = gym.make('Acrobot-v1')
 env.seed(0)
