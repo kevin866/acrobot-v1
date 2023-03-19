@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.distributions import Categorical
+import numpy as np
 
 torch.manual_seed(0) # set random seed
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -26,11 +27,17 @@ class Policy(nn.Module):
         for layer in self.layers[:-1]:
             x = self.acti(layer(x))
         out = self.layers[-1](x)
-        return F.softmax(out, dim=1)
+        return out
+        #return F.softmax(out, dim=1)
         
     def act(self, state):
         state = torch.from_numpy(state).float().unsqueeze(0).to(device)
         probs = self.forward(state).cpu()
-        m = Categorical(probs)
-        action = m.sample()
-        return action.item() - 1, m.log_prob(action)
+        #m = Categorical(probs)
+        #action = m.sample()
+        #print(probs)
+        action = torch.argmax(probs)
+        #return action.item() - 1, m.log_prob(action)
+        print(probs.numpy())
+        
+        return action.item()-1, probs.numpy()[action.item()-1]

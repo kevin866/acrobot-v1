@@ -20,7 +20,7 @@ def show_smart_agent():
     state = env.reset()
     cum_rew = 0
 
-    for t in range(1000):
+    for t in range(2500):
         recorder.capture_frame()
         action, _ = policy.act(state)
         env.render()
@@ -29,7 +29,7 @@ def show_smart_agent():
         if done:
             print(cum_rew)
             break 
-        time.sleep(0.05)
+        time.sleep(0.07)
 
     env.close()
 
