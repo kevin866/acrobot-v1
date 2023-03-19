@@ -8,7 +8,7 @@ torch.manual_seed(0) # set random seed
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class Policy(nn.Module):
-    def __init__(self, s_size=6, h_size=32, a_size=3, hidden_dim=[8,16,8], acti_fun = nn.ReLU()):
+    def __init__(self, s_size=6, h_size=32, a_size=3, hidden_dim=[32], acti_fun = nn.ReLU()):
         super(Policy, self).__init__()
         #self.fc1 = nn.Linear(s_size, h_size)
         #self.fc2 = nn.Linear(h_size, a_size)
