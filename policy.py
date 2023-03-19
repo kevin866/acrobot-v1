@@ -22,22 +22,19 @@ class Policy(nn.Module):
         self.layers.append(nn.Linear(current_dim, a_size))
 
     def forward(self, x):
-        #x = F.relu(self.fc1(x))
+        # = F.relu(self.fc1(x))
         #x = self.fc2(x)
         for layer in self.layers[:-1]:
             x = self.acti(layer(x))
         out = self.layers[-1](x)
-        return out
-        #return F.softmax(out, dim=1)
+        #return out
+        return F.softmax(out, dim=1)
         
     def act(self, state):
         state = torch.from_numpy(state).float().unsqueeze(0).to(device)
         probs = self.forward(state).cpu()
-        #m = Categorical(probs)
-        #action = m.sample()
-        #print(probs)
-        action = torch.argmax(probs)
-        #return action.item() - 1, m.log_prob(action)
-        print(probs.numpy())
-        
-        return action.item()-1, probs.numpy()[action.item()-1]
+        m = Categorical(probs)
+        action = m.sample()
+        #action = torch.argmax(probs)
+        return action.item() - 1, m.log_prob(action)
+        #return action.item()-1, probs.numpy()[action.item()-1]
