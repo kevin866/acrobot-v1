@@ -12,7 +12,7 @@ from torch.distributions import Categorical
 from policy import Policy
 from gym.wrappers.monitoring.video_recorder import VideoRecorder
 import torch.nn as nn
-
+from plot import plot
 env = gym.make('Acrobot-v1')
 env.seed(0)
 print('observation space:', env.observation_space)
@@ -23,7 +23,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 policy = Policy().to(device)
 optimizer = optim.Adam(policy.parameters(), lr=0.001)
 
-def reinforce(n_episodes=5, max_t=1000, gamma=1.0, print_every=100):
+def reinforce(n_episodes=5000, max_t=1000, gamma=1.0, print_every=100):
     scores_deque = deque(maxlen=100)
     scores = []
     for i_episode in range(1, n_episodes+1):
@@ -54,7 +54,16 @@ def reinforce(n_episodes=5, max_t=1000, gamma=1.0, print_every=100):
         
         if i_episode % print_every == 0:
             torch.save(policy.state_dict(), 'checkpoint.pth')
-            print('Episode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_deque)))        
+            print('Episode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_deque)))
+    n = 100
+
+    avg_scores = [-sum(scores[i:i+n])//n for i in range(0,len(scores),n)]
+
+    
+    plot([-i for i in scores],avg_scores, [i for i in range(1, n_episodes+1)],[i for i in range(1, n_episodes+1,100)])
+            
     return scores
+
+
 
 scores = reinforce()
